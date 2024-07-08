@@ -1,5 +1,5 @@
 import zod, { string } from "zod";
-import { Userdetails,signinType } from "../types/userDetails";
+import { Userdetails,signinType ,urlType} from "../types/userDetails";
 const userSchema=zod.object({
     email:zod.string().email("not an email"),
     password:zod.string().min(8,"password incorrect"),
@@ -9,7 +9,16 @@ const userSchema=zod.object({
 const signinSchema=zod.object({
     email:zod.string().email("not an email"),
     password:zod.string().min(8,"password incorrect")
-})
+});
+ const urlSchema=zod.object({
+    userid:zod.string(),
+    url:zod.string()
+});
+export const urlParse=async(obj:urlType)=>
+{
+    const result=await urlSchema.safeParse(obj);
+    return result;
+}
 export const signupParse=async (obj:Userdetails)=>{
     const result=await userSchema.safeParse(obj);
     return result;

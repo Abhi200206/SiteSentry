@@ -1,10 +1,12 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import { signupParse,signinParse } from "../zod/zodValidation";
+import jwt from "jsonwebtoken";
+import { signupParse,signinParse,urlParse } from "../zod/zodValidation";
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import { Userdetails,signinType } from "../types/userDetails";
 export const userRouter = express.Router();
+const jwtpass:any=process.env.jwtpass;
 userRouter.post('/signup', async (req, res) => {
     const { email, password, firstName, lastName }: Userdetails = req.body;
     try {
@@ -16,15 +18,18 @@ userRouter.post('/signup', async (req, res) => {
                     email,
                     password: hashpass,
                     firstName,
-                    lastName
+                    lastName,
+                    
                 },
                 select:{
                     email:true,
                     firstName:true,
-                    lastName:true
+                    lastName:true,
+                    id:true
                 }
             });
-            return  res.status(200).json({result:true});
+            const token= jwt.sign({email,id:val.id},jwtpass);
+            return  res.status(200).json({result:true,token});
         }
          return res.status(200).json({
             result: result.success
@@ -46,13 +51,20 @@ userRouter.post('/signin',async(req,res)=>{
                 const val=await prisma.user.findFirst({
                     where:{
                         email
+                    },
+                    select:{
+                        email:true,
+                        firstName:true,
+                        lastName:true,
+                        password:true,
+                        id:true
                     }
                 });
-                console.log(val);
                 if(val)
                 {
                     const ans:boolean=await bcrypt.compare(password,val.password);
-                    return res.status(200).json({result:ans});
+                    const token= jwt.sign({email,id:val.id},jwtpass);
+                    return res.status(200).json({result:ans,token});
                 }
                 return res.status(402).json({val});
             }

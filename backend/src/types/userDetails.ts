@@ -8,3 +8,7 @@ export interface signinType{
     email:string,
     password:string
 }
+export interface urlType{
+    userid:string,
+    url:string
+}
