@@ -15,6 +15,7 @@ CREATE TABLE "Urls" (
     "userid" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
+    "on" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Urls_pkey" PRIMARY KEY ("id")
 );

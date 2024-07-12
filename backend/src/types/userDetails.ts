@@ -12,3 +12,10 @@ export interface urlType{
     userid:string,
     url:string
 }
+export interface urlArr{
+    id:string,
+    userid:string,
+    url:string,
+    active:boolean,
+    on:boolean
+}

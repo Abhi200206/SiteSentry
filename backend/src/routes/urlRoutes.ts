@@ -3,8 +3,6 @@ import { PrismaClient } from '@prisma/client';
 import { urlType } from "../types/userDetails";
 import { urlParse } from "../zod/zodValidation";
 import { middleWare } from "../middleware";
-import { userRouter } from "./userRoute";
-
 
 const prisma = new PrismaClient();
 export const urlRouter=express.Router();
@@ -34,10 +32,26 @@ urlRouter.post('/add',middleWare,async(req:any,res)=>{
         res.status(500).json({ error: "error" });
     }
 });
-urlRouter.post('/change',middleWare ,async(req:any,res)=>{
-    const {active}:{active:boolean,id:string}=req.body;
-    const id=req.query.id;
-    console.log(id);
+urlRouter.delete('/delete/:id',middleWare,async(req:any,res)=>{
+    const id=req.params.id;
+    try{
+            let result=await prisma.urls.delete({
+                where:{
+                    id
+                }
+            })
+            return res.status(200).json({result});
+    }
+    catch(err)
+    {
+        console.log("the error is: ");
+        console.log(err);
+        res.status(500).json({ error: "error" });
+    }
+});
+urlRouter.post('/change/:id',middleWare ,async(req:any,res)=>{
+    const {active,on}:{active:boolean,id:string,on:boolean}=req.body;
+    const id=req.params.id;
     const userid:string=req.userid;
 
     try{
@@ -47,7 +61,8 @@ urlRouter.post('/change',middleWare ,async(req:any,res)=>{
                 id
             },
             data:{
-                active
+                active,
+                on
             }
         });
         return res.status(200).json({result});

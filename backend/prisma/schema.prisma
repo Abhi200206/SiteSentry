@@ -27,5 +27,6 @@ model Urls {
   userid String
   url    String
   active Boolean @default(true)
+  on     Boolean @default(true)
   user   User    @relation(fields: [userid], references: [id])
 }
