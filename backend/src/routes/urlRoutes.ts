@@ -6,6 +6,28 @@ import { middleWare } from "../middleware";
 
 const prisma = new PrismaClient();
 export const urlRouter=express.Router();
+urlRouter.get('/get/:id',middleWare,async(req:any,res)=>{
+    const userid:string=req.userid;
+    const id=req.params.id;
+    try{
+        let result=await prisma.urls.findUnique({
+            where:{
+                id
+            }
+        });
+       if(result)
+       {
+            res.status(200).json({result});
+       }
+    }
+    catch(err)
+    {
+        console.log("the error is: ");
+        console.log(err);
+        res.status(500).json({ error: "error" });
+    }
+
+});
 urlRouter.post('/add',middleWare,async(req:any,res)=>{
     const {url}:urlType=req.body;
     const userid:string=req.userid;
@@ -78,7 +100,7 @@ urlRouter.post('/change/:id',middleWare ,async(req:any,res)=>{
 });
 urlRouter.get('/urls',middleWare ,async(req:any,res)=>{
     try{
-        const userid=req.id;
+        const userid=req.userid;
         const result=await prisma.urls.findMany({
             where:{
                 userid

@@ -5,6 +5,7 @@ import { signupParse,signinParse,urlParse } from "../zod/zodValidation";
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import { Userdetails,signinType } from "../types/userDetails";
+import { middleWare } from "../middleware";
 export const userRouter = express.Router();
 const jwtpass:any=process.env.jwtpass;
 userRouter.post('/signup', async (req, res) => {
@@ -31,7 +32,7 @@ userRouter.post('/signup', async (req, res) => {
             const token= jwt.sign({email,id:val.id},jwtpass);
             return  res.status(200).json({result:true,token});
         }
-         return res.status(200).json({
+         return res.status(401).json({
             result: result.success
         });
     }
@@ -78,4 +79,45 @@ userRouter.post('/signin',async(req,res)=>{
         console.log(err);
         res.status(500).json({ error: "error" });
     }
+});
+userRouter.get('/me',async(req,res)=>{
+        try{
+            const token=req.headers.authorization as string;
+                const result:any= jwt.verify(token,jwtpass);
+                res.json({bool:true,userid:result.id});
+
+        }
+        catch(err)
+        {
+            console.log("the error is: ");
+            console.log(err);
+            res.json({bool:false});
+        }
+});
+userRouter.get('/getdetails',middleWare,async(req:any,res)=>{
+    let id=req.userid;
+    try{
+        let result=await prisma.user.findUnique({
+            where:{
+                id
+            },
+            select:{
+                id:true,
+                email:true,
+                firstName:true,
+                lastName:true
+            }
+        });
+        if(result)
+        {
+           return  res.status(200).json({result});
+        }
+       return  res.status(401).json({error:"error"});
+    }
+    catch(err)
+        {
+            console.log("the error is: ");
+            console.log(err);
+            res.json({bool:false});
+        }
 });
