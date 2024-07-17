@@ -80,7 +80,9 @@ export const Home = () => {
                             </div>
                         </div>
                     </div>
-
+                    <div className="flex justify-center text-slate-400 text-sm mt-1">
+                        <p>Note: status updates every 3 minutes.</p>
+                    </div>
                     {urls.length === 0 ? (
                         <div className="flex justify-center items-center h-[300px] ">
                             <div>
