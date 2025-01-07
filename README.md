@@ -1,4 +1,4 @@
-# siteSentry
+# siteSentry 
 
 siteSentry is a robust and user-friendly application designed to monitor websites. Users can sign up, provide their website frontend or backend URLs, and receive email notifications if their websites go down. This ensures the reliability and uptime of web services, giving users peace of mind.
 
