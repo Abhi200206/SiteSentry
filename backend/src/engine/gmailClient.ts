@@ -1,33 +1,26 @@
-import { gmail_v1, gmail } from '@googleapis/gmail';
-import { OAuth2Client } from 'google-auth-library';
+import  nodemailer from "nodemailer";
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.email, 
+    pass: process.env.password, 
+  },
+});
 
-const oAuth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET);
-oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+export async function sendEmail(email:string,subject:string,message:string) {
+    const mailOptions = {
+        from: process.env.email, 
+        to: email, 
+        subject, 
+        html: message, 
+       };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+        console.error("Error sending email: " + error);
+        } else {
+        console.log("Email sent: " + info.response);
+        }
+       });
+}
 
-export const sendEmail = async (to: string, subject: string, message: string) => {
-    const gmailClient: gmail_v1.Gmail = gmail({ version: 'v1', auth: oAuth2Client });
-
-    const emailLines = [
-        `To: ${to}`,
-        'Content-Type: text/html; charset=utf-8',
-        'MIME-Version: 1.0',
-        `Subject: ${subject}`,
-        '',
-        message,
-    ];
-
-    const email = emailLines.join('\n').trim();
-
-    const base64EncodedEmail = Buffer.from(email).toString('base64').replace(/\+/g, '-').replace(/\//g, '_');
-
-    await gmailClient.users.messages.send({
-        userId: 'me',
-        requestBody: {
-            raw: base64EncodedEmail,
-        },
-    });
-};

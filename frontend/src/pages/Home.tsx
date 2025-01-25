@@ -18,22 +18,24 @@ export const Home = () => {
             }
         })
     }, []);
+
+    const fetchData = async () => {
+        setLoad(true);
+        try {
+            const result = await axios.get("http://localhost:3000/api/v1/url/urls", {
+                headers: {
+                    "authorization": localStorage.getItem('token') || ''
+                }
+            });
+            setUrls(result.data.result);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoad(false);
+        }
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            setLoad(true);
-            try {
-                const result = await axios.get("http://localhost:3000/api/v1/url/urls", {
-                    headers: {
-                        "authorization": localStorage.getItem('token') || ''
-                    }
-                });
-                setUrls(result.data.result);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setLoad(false);
-            }
-        };
+
 
         fetchData();
 
@@ -60,10 +62,10 @@ export const Home = () => {
                                     <p>logout</p>
                                 </div>
                                 <div onClick={() => {
-                                navigate('/profile');
-                            }} className="cursor-pointer rounded bg-black text-white p-1 hover:bg-slate-600 px-2">
-                                <p>profile</p>
-                            </div>
+                                    navigate('/profile');
+                                }} className="cursor-pointer rounded bg-black text-white p-1 hover:bg-slate-600 px-2">
+                                    <p>profile</p>
+                                </div>
                             </div>
                             <Head />
                             <div className="flex gap-2">
