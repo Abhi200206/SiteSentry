@@ -24,7 +24,7 @@ siteSentry is a robust and user-friendly application designed to monitor website
 - **Express**: A web application framework for Node.js.
 - **Prisma**: An ORM (Object-Relational Mapping) tool for database management.
 - **Axios**: A promise-based HTTP client for making requests.
-- **Gmail API**: For sending email notifications.
+- **Nodemailer**: For sending email notifications.
 - **bcryptjs**: For hashing passwords securely.
 - **jsonwebtoken**: For generating and verifying JWT tokens.
 - **zod**: For schema declaration and validation.
@@ -62,9 +62,8 @@ Create a `.env` file in the `backend` directory and add the following:
 ```plaintext
 DATABASE_URL=your_database_url
 JWT_SECRET=your_jwt_secret
-GMAIL_CLIENT_ID=your_gmail_client_id
-GMAIL_CLIENT_SECRET=your_gmail_client_secret
-GMAIL_REFRESH_TOKEN=your_gmail_refresh_token
+email=your_email
+password=your_password
 ```
 
 4. **Install dependencies for the frontend:**
