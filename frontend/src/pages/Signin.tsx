@@ -48,7 +48,7 @@ export const Signin = () => {
                         <Aster value="Email" />
                         <input onChange={(e) => setEmail(e.target.value)} className="w-full p-1 border-[1px] border-black rounded my-1" type="text" placeholder="enter email" />
                         <Aster value="Password" />
-                        <input onChange={(e) => setPassword(e.target.value)} className="w-full p-1 border-[1px] border-black rounded  my-1" type="password" placeholder="enter email" />
+                        <input onChange={(e) => setPassword(e.target.value)} className="w-full p-1 border-[1px] border-black rounded  my-1" type="password" placeholder="enter password" />
                         <div onClick={submit} className="rounded bg-black text-white text-center p-1 cursor-pointer my-2 hover:bg-slate-500">
                             {loading ? <Loading /> : <p>signin</p>}
                         </div>
